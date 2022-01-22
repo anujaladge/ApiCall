@@ -19,7 +19,7 @@ class ApiManager {
         var request = URLRequest(url: urlString)
         request.httpMethod = "GET"
         
-        let task = session.dataTask(with: request) { (data, response, error) in
+        let task = session.dataTask(with: request) { [weak self](data, response, error) in
             
             if let checkError = error  {
                 print(checkError.localizedDescription)
@@ -30,9 +30,9 @@ class ApiManager {
             
             guard let  jsonData = data else { return }
             
-            let userDetails = self.parseDara(serverData: jsonData)
+            let userDetails = self?.parseDara(serverData: jsonData)
             
-            completionHandler(userDetails)
+            completionHandler(userDetails ?? [])
         }
         task.resume()
     }
